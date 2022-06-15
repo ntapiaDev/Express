@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>User List</title>
+    </head>
+    <body>
+        <h1>User List</h1>
+        <ul>
+            <%
+                var list = '';
+                for(i = 0; i < userlist.length; i++) {
+                    list += '<li><a href="mailto:' + userlist[i].email + '">' + userlist[i].username + '</a>';
+                    list += '<span style="margin-left: 20px"><a href="#" onclick="updateUser(\'' + userlist[i]._id + '\')">Update</a></span>';
+                    list += '<span style="margin-left: 20px"><a href="/users/deleteuser/' + userlist[i]._id + '">Delete</a></span>';
+                    list += '</li>'
+                }
+            %>
+            <%- list %>
+        </ul>
+        <form action="/users/adduser" method="POST" id="formAddUser" name="adduser">
+            <input type="text" id="inputUserName" name="username" placeholder="Username">
+            <input type="text" id="inputUserEmail" name="useremail" placeholder="Email">
+            <input type="text" id="inputUserFullname" name="userfullname" placeholder="Fullname">
+            <input type="text" id="inputUserAge" name="userage" placeholder="Age">
+            <input type="text" id="inputUserLocation" name="userlocation" placeholder="Location">
+            <input type="text" id="inputUserGender" name="usergender" placeholder="Gender">
+            <input type="hidden" id="inputActionType" name="actiontype" value="add">
+            <input type="hidden" id="inputUpdateId" name="updateid" value="">
+            <button type="submit" id="btnSubmit">Submit</button>
+        </form>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            // function addUser(e) {
+            //     e.preventDefault();
+            //     $('#inputUserName').val('');
+            //     $('#inputUserEmail').val('');
+            //     $('#inputUserFullname').val('');
+            //     $('#inputUserAge').val('');
+            //     $('#inputUserLocation').val('');
+            //     $('#inputUserGender').val('');
+            //     $('#inputActionType').val('');
+            //     $('#inputUpdateId').val('');
+            //     $('#inputUserName').val('');
+            // }
+
+            function updateUser(id) {
+
+                $.ajax({
+                    url: "/users/"+id,
+                    cache: false 
+                })
+                .done(function(json) {
+                    if(json!=null) {
+                        $('#inputUserName').val(json.username);
+                        $('#inputUserEmail').val(json.email);
+                        $('#inputUserFullname').val(json.fullname);
+                        $('#inputUserAge').val(json.age);
+                        $('#inputUserLocation').val(json.location);
+                        $('#inputUserGender').val(json.gender);
+                        $('#inputActionType').val('edit');
+                        $('#inputUpdateId').val(id);
+                        $('#inputUserName').focus();
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
