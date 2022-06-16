@@ -8,7 +8,7 @@
             <%
                 var list = '';
                 for(i = 0; i < userlist.length; i++) {
-                    list += '<li><a href="mailto:' + userlist[i].email + '">' + userlist[i].username + '</a>';
+                    list += '<li><a href="#" onclick="showUser(\'' + userlist[i]._id + '\')">' + userlist[i].username + '</a>';
                     list += '<span style="margin-left: 20px"><a href="#" onclick="updateUser(\'' + userlist[i]._id + '\')">Update</a></span>';
                     list += '<span style="margin-left: 20px"><a href="/users/deleteuser/' + userlist[i]._id + '">Delete</a></span>';
                     list += '</li>'
@@ -27,6 +27,17 @@
             <input type="hidden" id="inputUpdateId" name="updateid" value="">
             <button type="submit" id="btnSubmit">Submit</button>
         </form>
+
+        <div id="showUser" style="width: 20%; float: left; display: none">
+            <strong>Name :</strong> <span id="userInfoName"></span>
+            <br>
+            <strong>Age :</strong> <span id="userInfoAge"></span>
+            <br>
+            <strong>Gender :</strong> <span id="userInfoGender"></span>
+            <br>
+            <strong>Location :</strong> <span id="userInfoLocation"></span>
+            <br>
+        </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
@@ -61,6 +72,22 @@
                         $('#inputUserName').focus();
                     }
                 });
+            }
+
+            function showUser(id) {
+                $.ajax({
+                    url: "/users/"+id,
+                    cache: false 
+                })
+                .done(function(json) {
+                    if(json!=null) {
+                        $('#userInfoName').html(json.fullname);
+                        $('#userInfoAge').html(json.age);
+                        $('#userInfoGender').html(json.gender);
+                        $('#userInfoLocation').html(json.location);
+                        $('#showUser').show();
+                    }
+                })
             }
         </script>
     </body>

@@ -6,9 +6,10 @@ router.get('/userlist', function (req, res) {
 
   var collection = db.get('userlist');
   collection.find({}, {}, function (e, docs) {
-    res.render('userlist', {
-      "userlist": docs
-    });
+    // res.render('userlist', {
+    //   "userlist": docs
+    // });
+    res.json(docs);
   });
 });
 
