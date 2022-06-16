@@ -31,15 +31,16 @@ router.post('/adduser', function (req, res) {
   switch (actionType) {
     case 'edit':
 
-      collection.update({ '_id' : updateId }, {
+      collection.update({ '_id' : updateId }, { $set : {
         "username": userName,
         "email": userEmail,
         "fullname": userFullName,
         "age": userAge,
         "location": userLocation,
         "gender": userGender
-      }, function (err) {
+      }}, function (err) {
         if (err) {
+          console.log(err);
           res.send("Il y a eu un problème pour mettre à jour cet utilisateur");
         }
         else {
@@ -67,6 +68,21 @@ router.post('/adduser', function (req, res) {
       break;
     }
   });
+
+// DELETE USER
+router.get('/deleteuser/:id', function(req, res) {
+  var db = req.db;
+  var collection = db.get('userlist');
+  var userToDelete = req.params.id;
+  collection.remove({ '_id' : userToDelete }, function(err) {
+    if (err) {
+      res.send("Il y a eu un problème pour supprimer cet utilisateur");
+    }
+    else {
+      res.redirect("/users/userlist");
+    }
+  })
+})
 
 router.get('/:id', function (req, res) {
   var db = req.db;
